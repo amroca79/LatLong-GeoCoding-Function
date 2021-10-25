@@ -1,0 +1,36 @@
+def LatLong(address):
+
+    global coord_df2
+    
+    latitude1=[]
+    longitude2=[]
+
+    for hood in address:
+    
+        geolocator = Nominatim(user_agent='Foursquare_agent')
+        location = geolocator.geocode(hood)
+
+    if location is not None:
+
+        latitude1.append(location.latitude)
+        longitude2.append(location.longitude)
+    
+    elif location is None:
+
+        g = geocoder.arcgis('{}'.format(hood))
+        lat_lng_coords = g.latlng
+
+        lat_list = lat_lng_coords[0:1]
+        lng_list = lat_lng_coords[1:2]
+        
+        for lat in lat_list:
+            latitude1.append(lat)
+        for lng in lng_list:
+            longitude2.append(lng)
+    
+    else:
+        print(f'Coordinates not available for location: {hood!r}')
+
+    coord_df2 = pd.DataFrame({'Latitude':latitude,'Longitude':longitude})
+    
+    return(coord_df2)
